@@ -1,0 +1,11 @@
+id,Type,PromoterName,SpeciesName,GeneName,GeneStart,GeneEnd,GeneProduct,TSSPosition,Strand,Locus_tag,PromoterSeq
+1,chr,NA,Acinetobacter baumannii ATCC 17978,A1S_0001,NA,NA,NA,30,+,NA,acacttccataatattttgatttcccacatatgtggataacttgggtagaatggcgacccCttctcatcaggaagggttaa
+2,chr,NA,Acinetobacter baumannii ATCC 17978,A1S_0004,NA,NA,NA,3651,+,NA,aactgtcacaaattgcaatgttgcatgcgagtaataaggaaactgtggtattattagatgAtctgacagcagaattagact
+3,chr,NA,Acinetobacter baumannii ATCC 17978,A1S_0009,NA,NA,NA,11078,+,NA,gataaaaatatttgagtaaaagctctatttttttctaaaaaacatgattaatatctgtgtTtgaaaggaaacttcaaacaa
+4,chr,NA,Acinetobacter baumannii ATCC 17978,A1S_0009,NA,NA,NA,11079,+,NA,ataaaaatatttgagtaaaagctctatttttttctaaaaaacatgattaatatctgtgttTgaaaggaaacttcaaacaaa
+5,chr,NA,Acinetobacter baumannii ATCC 17978,A1S_0011,NA,NA,NA,13557,+,NA,ctcaagattcgctttaaacttcgaagacagaccctatattgattatgctatactcaatatAgggtcttttttattttgaaa
+6,chr,NA,Acinetobacter baumannii ATCC 17978,A1S_0024,NA,NA,NA,31844,+,NA,gattgaagttgtatttttacaatacgtcgctgtggcattcagtattttattattagtgatGtggagcggggtaatgaagaa
+7,chr,NA,Acinetobacter baumannii ATCC 17978,A1S_0037,NA,NA,NA,43574,+,NA,tgtaaatcaacattcaattgcgacatggtgtcacctctaaacttgggttatctttttgatGtagttcgccgttagtgtagc
+8,chr,NA,Acinetobacter baumannii ATCC 17978,A1S_0037,NA,NA,NA,43679,+,NA,cccaataaaaaacttcacagaagcaaaacgaatttagcatatttgttttatatttagggcAtaagctaatgcataacaact
+9,chr,NA,Acinetobacter baumannii ATCC 17978,A1S_0037,NA,NA,NA,43693,+,NA,tcacagaagcaaaacgaatttagcatatttgttttatatttagggcataagctaatgcatAacaacttagaggaaaagctg
+10,chr,NA,Acinetobacter baumannii ATCC 17978,A1S_0040,NA,NA,NA,45950,+,NA,tcataaaaaaaatagtgaacaagtgttgactgagtgaacacttataaatatagtgtacatAtgttcactatacgaacatgt
