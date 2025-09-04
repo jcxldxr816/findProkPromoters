@@ -30,6 +30,7 @@ Output will show:
 
 import csv # Standard library for reading and writing CSV files (Lib/csv.py)
 import datetime # Standard library for getting current time (Lib/datetime.py)
+import heapq # Standard library for min-heap data structure. Used to track top X scores for quick output (Lib/heapq.py)
 
 def sanitizeString(file_path: str) -> str:
     """
@@ -59,65 +60,89 @@ def validateDNAString(dna_seq: str) -> str:
     return cleaned
 
 # read from csv, send to this function
-def calculateScore(queryString: str, motifString: str) -> float:
-    queryLength: int = len(queryString)
-    motifLength: int = len(motifString)
+def calculateScore(query_string: str, motif_string: str) -> float:
+    query_length: int = len(query_string)
+    motif_length: int = len(motif_string)
 
-    motifString = motifString.upper()
+    motif_string = motif_string.upper()
     
     # Adding junk characters to end to make strings equal length
-    diff: int = queryLength - motifLength
+    diff: int = query_length - motif_length
     if diff < 0: # Motif is longer than Query
         for i in range(0, abs(diff)):
-            queryString += 'X'
+            query_string += 'X'
     elif diff > 0: # Query is longer than Motif
         for i in range(0, diff):
-            motifString += 'X'
-    # Sequences should now be equal lengths.
+            motif_string += 'X'
 
     # Comparing the characters between the two strings
-    matchingCharCount: int = 0
-    for index, char in enumerate(motifString): # Using index to ensure character positions align for comparison
-        if (motifString[index] == queryString[index]):
-            matchingCharCount += 1 # Keeping track of correct/matching characters
+    matching_character_count: int = 0
+    for index, char in enumerate(motif_string): # Using index to ensure character positions align for comparison
+        if (motif_string[index] == query_string[index]):
+            matching_character_count += 1 # Keeping track of correct/matching characters
 
-    score: float = (matchingCharCount / len(motifString)) * 100.0 # Calculating a percentage of correct/matching characters
+    score: float = (matching_character_count / len(motif_string)) * 100.0 # Calculating a percentage of correct/matching characters
     return score
+
+def readFromCSV(file_to_read: str) -> list:
+    with open(file_to_read, 'r', newline='') as motif_file: #TODO we should validate input before working with file - James
+        reader = csv.DictReader(motif_file)
+        data_from_file = list(reader) # is a list of dictionaries (each row is a dict)
+    return data_from_file
+
+def writeToCSV(data_to_write: list, output_destination: str):
+    fieldnames = data_to_write[0].keys() # Updating column names to include the newly added 'Score' column
+    with open(output_destination, mode='w', newline='') as outfile:
+        writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(data_to_write)
+        print(f"Successfully created output file: {output_destination}")
+
+def outputQuickOverview(data_to_sort: list, amount_to_display: int):
+    top_scores = []
+    for index, row in enumerate(data_to_sort):
+        score = row["Score"]
+        motif_entry = (score, index, row) # Using index as a tiebreaker value for heap comparison. heapq can't compare equal values
+
+        if len(top_scores) < amount_to_display:
+            heapq.heappush(top_scores, motif_entry)
+        else:
+            heapq.heappushpop(top_scores, motif_entry) # This pops(removes) the smallest value from the heap
+    top_scores = sorted(top_scores, key=lambda x: x[0], reverse=True) # Sorting by scores
+    for score, _, row in top_scores:
+        print(f"Promoter ID: {row['id']}\t||\tScore: {score}")
 
 if __name__ == "__main__":
     # Step 1: Ask the user to type the file name
     file_name = input("Enter the DNA file name: ")
 
     # Step 2: Sanitize (remove spaces/newlines)
-    cleaned = sanitizeString(file_name)
+    cleaned_string = sanitizeString(file_name)
 
     # Step 3: Validate (remove invalid characters)
-    validated = validateDNAString(cleaned)
+    validated_string = validateDNAString(cleaned_string)
 
     # Step 4: Print results for the user
-    print("After sanitize:", cleaned)
-    print("After validate:", validated)
+    # print("After sanitize:", cleaned)
+    # print("After validate:", validated)
+    print("Here is the cleaned input DNA sequence:", validated_string)
 
     # Step 5: Ask user to specify a .csv file to use as motifs
     motif_csv_file = input("Enter the motif file name (.csv): ")
+    print("Comparing DNA sequence to known promoters. This may take a while...")
 
     # Step 6: Read from csv file
-    column_values = []
-    with open(motif_csv_file, 'r', newline='') as motif_file: #TODO we should validate input before working with file - James
-        reader = csv.DictReader(motif_file)
-        motif_data = list(reader)
+    motif_data = readFromCSV(motif_csv_file)
 
     # Step 7: Calculate score for every row in csv
     for row in motif_data:
-        row['Score'] = calculateScore(validated, row['PromoterSeq']) # Adding score to motif_data
+        row['Score'] = calculateScore(validated_string, row['PromoterSeq']) # Adding score to motif_data
 
     # Step 8: Write results to new csv file
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    output_filename = f"output_{timestamp}.csv" # Name used for file output
-    
-    fieldnames = motif_data[0].keys() # Updating column names to include the newly added 'Score' column
-    with open(output_filename, mode='w', newline='') as outfile:
-        writer = csv.DictWriter(outfile, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(motif_data)
-        print(f"Successfully created output file: {output_filename}")
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S") # getting timestamp to keep file names unique
+    output_filename = f"./output/output_{timestamp}.csv" # Name used for file output
+    writeToCSV(motif_data, output_filename)
+
+    # Step 9: Display quick overview of results in terminal
+    print("Printing scores!")
+    outputQuickOverview(motif_data, 3) # Printing top 3 scores in terminal.
