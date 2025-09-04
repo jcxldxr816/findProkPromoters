@@ -39,6 +39,9 @@ def sanitizeString(file_path: str) -> str:
     """
     with open(file_path, "r") as f:        # Open the file in read mode             #TODO we should validate input before working with file - James
         data = f.read()                    # Read the entire file as a string
+    if not data.strip():  # if file is empty or only spaces/newlines
+        print("Error: The file is empty.")
+        return ""
     cleaned = data.replace(" ", "")        # Remove all spaces
     cleaned = cleaned.replace("\n", "")    # Remove all newlines
     return cleaned
