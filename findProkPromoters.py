@@ -1,6 +1,6 @@
 """
-DNA Sequence Cleaner
---------------------
+DNA Sequence Promoter Finder
+----------------------------
 
 Purpose:
 This program reads a DNA sequence from a text file,
@@ -8,26 +8,30 @@ removes unnecessary characters (spaces, line breaks),
 and validates that the sequence only contains the
 four standard DNA bases: A, T, C, G.
 
+It then compares the cleaned DNA sequence to known
+promoter motifs stored in a CSV file, calculates
+similarity scores, writes the results to a new CSV
+file, and prints a quick summary of the best matches.
+
 Biological context:
-DNA sequences often come with formatting errors,
-extra spaces, or invalid characters. For correct
-biological analysis, only valid bases should be used.
+Promoters are short DNA motifs that signal where
+gene transcription should begin. Identifying these
+motifs helps us predict gene expression patterns.
 
 Program flow:
-1. Ask the user for the name of the input file.
-2. Read the DNA sequence from the file and remove spaces/newlines.
-3. Validate the sequence by keeping only A, T, C, G.
-4. Print the intermediate and final results.
+1. Ask the user for the DNA file name.
+2. Sanitize the DNA (remove spaces/newlines).
+3. Validate the DNA (keep only A, T, C, G).
+4. Print the cleaned DNA sequence.
+5. Ask the user for a promoter motifs CSV file.
+6. Read promoter motifs from the CSV file.
+7. Compare DNA sequence to motifs and calculate scores.
+8. Save results to a timestamped CSV file.
+9. Print the highest scoring motifs in the terminal.
 
 Usage:
-$ python part1a_ashik.py
-Enter the DNA file name: dna.txt
-
-Output will show:
-- The sequence after sanitization (step 2).
-- The sequence after validation (step 3).
+$ python findProkPromoter.py
 """
-
 import csv # Standard library for reading and writing CSV files (Lib/csv.py)
 import datetime # Standard library for getting current time (Lib/datetime.py)
 import heapq # Standard library for min-heap data structure. Used to track top X scores for quick output (Lib/heapq.py)
