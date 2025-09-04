@@ -32,7 +32,6 @@ Program flow:
 Usage:
 $ python findProkPromoter.py
 """
-#TODO update
 
 
 import csv # Standard library for reading and writing CSV files (Lib/csv.py)
